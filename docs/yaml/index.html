@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Download your player YAML | Twichipelago</title><link rel="stylesheet" href="./styles.css"><script type="module" src="./app.mjs"></script></head>
+<body><main><p class="eyebrow">TWICHIPelago / SESSION SETUP</p><h1>Your audience.<br>Your player YAML.</h1>
+<p class="intro">Save your configuration as an Archipelago player file, then give it to the multiworld host before generation.</p>
+<section aria-labelledby="export-title"><h2 id="export-title">Player file</h2><p id="status" role="status">Reading your export...</p>
+<dl id="details" hidden><dt>Audience slot</dt><dd id="slot"></dd><dt>Filename</dt><dd id="filename"></dd></dl>
+<button id="download" disabled>Download player YAML</button><p class="note">This saves a .yaml file. Keep the filename extension when you give it to your host.</p>
+<details id="preview" hidden><summary>View YAML or copy manually</summary><textarea id="yaml" aria-label="Player YAML" rows="18" readonly spellcheck="false"></textarea><button id="select" type="button">Select all YAML</button><p class="note">Press Ctrl+C (Command+C on Mac). In Notepad, save with the filename above and choose All files to avoid adding .txt.</p></details></section>
+<aside><strong>Your settings stay in your browser.</strong><p>The export is passed in the URL fragment and processed here. It is not sent to a Twichipelago server. This page has no analytics, account login or saved configuration.</p><p class="note">Refreshing this page discards the current export. Return to the Twitch Extension to generate another link.</p></aside>
+<footer>Need to change your choices? Return to the Twitch Extension, save your settings, and select Download player YAML again.</footer></main></body></html>
