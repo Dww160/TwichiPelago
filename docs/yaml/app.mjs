@@ -19,7 +19,7 @@ function readExport() {
     document.querySelector('#preview').hidden = false;
     yaml.value = current.yaml;
     download.disabled = false;
-    status.textContent = 'Ready. Click Download player YAML to save your file.';
+    status.textContent = 'Ready. Click Download YAML to save your file.';
   } catch(error) { status.textContent = error.message; }
 }
 download.addEventListener('click', () => {
@@ -37,3 +37,5 @@ download.addEventListener('click', () => {
 document.querySelector('#select').addEventListener('click', () => { yaml.focus(); yaml.select(); });
 addEventListener('hashchange',readExport);
 readExport();
+
+
