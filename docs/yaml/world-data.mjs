@@ -10,7 +10,7 @@ export function playerYaml(name, checks = WORLD.defaultChecks, progressionItems 
   validateReleaseCounts(checks, progressionItems, trapItems);
   if (checks > 50 || progressionItems > 50 || trapItems > 50) throw new Error("Starting counts must be at most 50; generation can grow total checks up to 500.");
   const runtimeLine = runtimeSettings ? `  runtime_settings: ${JSON.stringify(validateRuntimeSettings(runtimeSettings))}\n` : '';
-  return `# Requires twichipelago.apworld 0.0.8 or newer on the host generator.\n# Total checks are a starting target and may grow up to 500 for non-local items. Unavailable traps become normal checks; positive progression counts may increase for non-local items; zero stays off.\nname: ${JSON.stringify(name.trim())}\ngame: Twichipelago\nrequires:\n  version: 0.6.8\n  game:\n    Twichipelago: 0.0.8\nTwichipelago:\n  progression_balancing: 50\n  accessibility: full\n  audience_checks: ${checks}\n  progression_items: ${progressionItems}\n  trap_items: ${trapItems}\n${runtimeLine}`;
+  return `# Requires twichipelago.apworld 0.0.9 or newer on the host generator.\n# Total checks are a starting target and may grow up to 500 for non-local items. Unavailable traps become normal checks; positive progression counts may increase for non-local items; zero stays off.\nname: ${JSON.stringify(name.trim())}\ngame: Twichipelago\nrequires:\n  version: 0.6.8\n  game:\n    Twichipelago: 0.0.9\nTwichipelago:\n  progression_balancing: 50\n  accessibility: full\n  audience_checks: ${checks}\n  progression_items: ${progressionItems}\n  trap_items: ${trapItems}\n${runtimeLine}`;
 }
 
 export function playerYamlFilename(name) {
@@ -21,10 +21,11 @@ export function playerYamlFilename(name) {
 }
 
 export function validateRuntimeSettings(value) {
-  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).sort().join() !== ['version','broadcaster_id','client_id','costs','allow_progression'].sort().join() || value.version !== 1) throw new Error('Invalid broadcaster settings.');
+  if (!value || typeof value !== 'object' || Array.isArray(value) || ![1,2].includes(value.version) || Object.keys(value).sort().join() !== ['version','broadcaster_id','client_id','costs','allow_progression',...(value.version === 2 ? ['reward_enabled'] : [])].sort().join()) throw new Error('Invalid broadcaster settings.');
   if (typeof value.broadcaster_id !== 'string' || !/^[0-9]{1,30}$/.test(value.broadcaster_id)) throw new Error('Wait for Twitch to identify your broadcaster account.');
   if (typeof value.client_id !== 'string' || !/^[a-zA-Z0-9]{10,64}$/.test(value.client_id)) throw new Error('Enter your public Twitch application Client ID.');
   if (!value.costs || Object.keys(value.costs).sort().join() !== ['normal','progression','trap'].sort().join() || !Object.values(value.costs).every(n => Number.isInteger(n) && n >= 1 && n <= 1000000000)) throw new Error('Each Channel Point cost must be a whole number from 1 to 1,000,000,000.');
   if (typeof value.allow_progression !== 'boolean') throw new Error('Choose whether to allow progression rewards.');
-  return {version:1,broadcaster_id:value.broadcaster_id,client_id:value.client_id,costs:{...value.costs},allow_progression:value.allow_progression};
+  if (value.version === 2 && (!value.reward_enabled || Object.keys(value.reward_enabled).sort().join() !== ['normal','progression','trap'].sort().join() || !Object.values(value.reward_enabled).every(n => typeof n === 'boolean'))) throw new Error('Choose which rewards to enable.');
+  return {...(value.version === 2 ? {reward_enabled:{...value.reward_enabled}} : {}),version:value.version,broadcaster_id:value.broadcaster_id,client_id:value.client_id,costs:{...value.costs},allow_progression:value.allow_progression};
 }
